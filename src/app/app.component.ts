@@ -17,8 +17,10 @@ export class AppComponent implements OnInit {
 			.subscribe(datas => this.data = datas);
 
 	}
+
 	ngOnInit() {
 	}
+
 	move(num) {
 		const prompt = confirm('Premakni levo?');
 
@@ -31,12 +33,18 @@ export class AppComponent implements OnInit {
 			return x !== num;
 		}));
 	}
+
 	moveLeft(e) {
-		this.dataRight = this.dataRight.filter(x => x !== e);
+		this.dataRight = this.filter(this.dataRight, e);
 		this.dataLeft.push(e);
 	}
+
 	moveRight(e) {
-		this.dataLeft = this.dataLeft.filter(x => x !== e);
+		this.dataLeft = this.filter(this.dataLeft, e);
 		this.dataRight.push(e);
+	}
+
+	filter(arr, num) {
+		return arr.filter(x => x !== num);
 	}
 }
