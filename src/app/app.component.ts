@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './data.service';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-root',
@@ -8,19 +9,16 @@ import { Observable } from 'rxjs';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-	data$: Observable<number>;
+	data$: Observable<number[]>;
 	data: number[];
 	dataLeft: number[] = [];
 	dataRight: number[] = [];
 	constructor(private dataService: DataService) {
-		this.dataService.getData()
-			.subscribe(datas => this.data = datas);
-
+		this.data$ = this.dataService.getData();
 	}
 
 	ngOnInit() {
 	}
-
 	move(num) {
 		const prompt = confirm('Premakni levo?');
 
@@ -29,9 +27,10 @@ export class AppComponent implements OnInit {
 		} else {
 			this.dataRight.push(num);
 		}
-		this.data = this.data.filter(((x) => {
-			return x !== num;
-		}));
+		this.data$ = this.data$
+			.pipe(
+				map((x: number[]) => x.filter(item => item !== num)));
+
 	}
 
 	moveLeft(e) {
